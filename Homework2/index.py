@@ -21,8 +21,8 @@ for element in root.iter("book"):
 	for keyword in split_words: 
 		if keyword != '\n' and keyword not in all_keywords:
 			all_keywords[keyword] = {}
-		all_keywords[keyword][element.get("id")] = {} 
-		all_keywords[keyword][element.get("id")][element.getchildren()[0].tag] = element.getchildren()[0].text
+		all_keywords[keyword][element.get("id")] = [] 
+		all_keywords[keyword][element.get("id")].append(element.getchildren()[0].tag)
 
 # title
 for element in root.iter("book"):
@@ -33,8 +33,8 @@ for element in root.iter("book"):
 	for keyword in split_words:
 		if keyword != '\n' and keyword not in all_keywords:
 			all_keywords[keyword] = {}
-		all_keywords[keyword][element.get("id")] = {} 
-		all_keywords[keyword][element.get("id")][element.getchildren()[1].tag] = element.getchildren()[1].text
+		all_keywords[keyword][element.get("id")] = [] 
+		all_keywords[keyword][element.get("id")].append(element.getchildren()[1].tag)
 
 
 # genre
@@ -42,8 +42,8 @@ for element in root.iter("book"):
 	split_words = element.getchildren()[2].text.lower() 
 	if split_words != '\n' and split_words not in all_keywords:
 		all_keywords[keyword] = {}
-	all_keywords[keyword][element.get("id")] = {} 
-	all_keywords[keyword][element.get("id")][element.getchildren()[2].tag] = element.getchildren()[2].text
+	all_keywords[keyword][element.get("id")] = [] 
+	all_keywords[keyword][element.get("id")].append(element.getchildren()[2].tag)
 
 # description
 for element in root.iter("book"):
@@ -55,8 +55,8 @@ for element in root.iter("book"):
 		if keyword != '' and keyword != '\n':
 			if keyword not in all_keywords:
 				all_keywords[keyword] = {}
-			all_keywords[keyword][element.get("id")] = {} 
-			all_keywords[keyword][element.get("id")][element.getchildren()[5].tag] = element.getchildren()[5].text
+			all_keywords[keyword][element.get("id")] = [] 
+			all_keywords[keyword][element.get("id")].append(element.getchildren()[5].tag)
 
 new_root = etree.Element("keywords_catalog") 
 for key, val in all_keywords.items(): 
@@ -65,9 +65,9 @@ for key, val in all_keywords.items():
 	for k,v in val.items(): 
 		ids = etree.SubElement(keyword,"id") 
 		ids.text = k 
-		for a_k, a_v in v.items(): 
-			attr = etree.SubElement(ids,a_k) 
-			attr.text = a_v 
+		for att in v: 
+			attr = etree.SubElement(ids,"attribute") 
+			attr.text = att 
 
 
 et = etree.ElementTree(new_root)
